@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08111f">
+  <meta name="description" content="BrandShield AI — simulated digital risk protection demo for social impersonation, scam profiles, and suspicious mobile apps.">
+  <title>BrandShield AI | Digital Risk Protection</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js?v=20261014-8" defer></script>
+</head>
+<body data-safe-browsing-configured="{{ 'true' if safe_browsing_configured else 'false' }}">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" data-view-link="dashboard" aria-label="BrandShield AI dashboard">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 3 27 7v8c0 7-4.7 11.4-11 14C9.7 26.4 5 22 5 15V7l11-4Z"/><path d="m11 16 3.2 3.2L21.5 12"/></svg></span>
+        <span><strong>BrandShield<span>AI</span></strong><small>THREAT OPERATIONS</small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="primary-nav" aria-label="Main navigation">
+        <button class="nav-link is-active" type="button" data-view="dashboard"><span class="nav-icon">◈</span>Dashboard</button>
+        <button class="nav-link" type="button" data-view="cases"><span class="nav-icon">⌑</span>Threat detections<span class="nav-count" id="navCaseCount">0</span></button>
+        <button class="nav-link" type="button" data-view="graph"><span class="nav-icon">⌘</span>Threat Graph</button>
+        <button class="nav-link" type="button" data-view="reports"><span class="nav-icon">▤</span>Reports</button>
+        <button class="nav-link" type="button" data-view="settings"><span class="nav-icon">⚙</span>Settings</button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-footer"><span class="shield-mini">◆</span> BRANDSHIELD AI <span class="footer-version">DEMO 1.0</span></div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="menuButton" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+        <div class="breadcrumb"><span>Workspace</span><span class="crumb-divider">/</span><strong id="pageCrumb">Dashboard</strong></div>
+        <label class="global-search" aria-label="Search investigations"><span class="search-icon">⌕</span><input id="globalSearch" type="search" placeholder="Search investigations…" autocomplete="off"><kbd>Ctrl K</kbd></label>
+        <div class="analyst-profile"><span class="profile-avatar">AD</span><span class="profile-copy"><strong>Analyst Demo</strong><small>Security analyst</small></span><form class="logout-form" method="post" action="/logout"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="logout-button" type="submit" aria-label="Sign out of BrandShield AI" title="Sign out">Sign out <span aria-hidden="true">↗</span></button></form></div>
+      </header>
+      <div class="content-wrap">
+        <section class="view-section is-visible" id="dashboardView" aria-labelledby="dashboardTitle">
+          <div class="page-heading">
+            <div><p class="eyebrow"><span class="eyebrow-dot"></span> DIGITAL RISK PROTECTION <span class="sample-tag">DEMO DATA</span></p><h1 id="dashboardTitle">Social &amp; app threat monitoring</h1><p class="subheading">Triage suspected fake profiles, brand impersonation, scam accounts, and suspicious mobile apps.</p></div>
+            <div class="heading-actions"><button class="button button-secondary" id="openTour" type="button"><span aria-hidden="true">▷</span> Guided demo</button><button class="button button-primary" type="button" data-open-case><span>＋</span> New investigation</button></div>
+          </div>
+          <div class="demo-banner"><span class="banner-icon">ⓘ</span><p><strong>DEMO ENVIRONMENT</strong><span> This workspace uses seeded sample detections and explainable local rules. No external social/app feeds, trained AI model, or continuous monitoring is connected. Optional website reputation checks are manual.</span></p><span class="banner-tag">DEMO DATA</span></div>
+
+          <div class="summary-grid" aria-label="Investigation key performance indicators">
+            <button class="summary-card" type="button" data-dashboard-filter="open" aria-label="Open cases. Show cases awaiting review."><span class="summary-top"><span>OPEN CASES</span><span class="metric-icon metric-blue">⌑</span></span><strong class="metric-value" id="openCases">—</strong><span class="summary-card-note">Awaiting analyst review · View cases →</span><span class="metric-accent accent-blue"></span></button>
+            <button class="summary-card" type="button" data-dashboard-filter="high" aria-label="High-risk cases. Show cases with risk scores of 70 or higher."><span class="summary-top"><span>HIGH RISK</span><span class="metric-icon metric-red">↗</span></span><strong class="metric-value" id="highRiskCases">—</strong><span class="summary-card-note">Indicators at 70 or above · View cases →</span><span class="metric-accent accent-red"></span></button>
+            <button class="summary-card" type="button" data-dashboard-filter="related" aria-label="Related clusters. Show cases linked by shared indicators."><span class="summary-top"><span>RELATED CLUSTERS</span><span class="metric-icon metric-teal">⌘</span></span><strong class="metric-value" id="relatedClusters">—</strong><span class="summary-card-note">Shared-indicator groups · View cases →</span><span class="metric-accent accent-teal"></span></button>
+            <button class="summary-card" type="button" data-dashboard-filter="reports" aria-label="Reports ready. Open report history."><span class="summary-top"><span>REPORTS READY</span><span class="metric-icon metric-orange">▤</span></span><strong class="metric-value" id="reportsReady">—</strong><span class="summary-card-note">Saved reports · Open report history →</span><span class="metric-accent accent-orange"></span></button>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel investigations-panel" aria-labelledby="recentTitle">
+              <div class="panel-header"><div><p class="panel-kicker">DETECTION QUEUE</p><h2 id="recentTitle">Recent threat detections</h2></div><button class="quiet-button" type="button" data-view-link="cases">View detections <span>→</span></button></div>
+              <div class="table-scroll"><table><thead><tr><th>ASSET</th><th>PLATFORM</th><th>RISK SCORE</th><th>STATUS</th><th><span class="sr-only">Details</span></th></tr></thead><tbody id="recentCasesBody"></tbody></table></div>
+              <div class="empty-state hidden" id="recentEmpty"><span class="empty-icon">⌑</span><strong>No investigations yet</strong><p>Add an investigation to populate your workspace.</p><button class="button button-secondary" type="button" data-open-case>Start an investigation</button></div>
+            </section>
+            <section class="panel analysis-panel" aria-labelledby="analysisTitle">
+              <div class="panel-header"><div><p class="panel-kicker">ANALYST WORKBENCH</p><h2 id="analysisTitle">Evidence &amp; analysis</h2></div><span class="panel-live" id="analysisCaseLabel">SELECT A CASE</span></div>
+              <div id="evidenceAnalysis"></div>
+            </section>
+          </div>
+
+          <div class="insight-grid" aria-label="Investigation analytics">
+            <section class="panel insight-panel" aria-labelledby="riskChartTitle">
+              <div class="panel-header"><div><p class="panel-kicker">RISK OVERVIEW</p><h2 id="riskChartTitle">Risk distribution</h2></div><span class="chart-note">Backend case data</span></div>
+              <p class="chart-explanation">Shows how many investigations fall into each rule-based risk band. A larger slice means more cases in that band; it does not prove fraud.</p>
+              <div class="risk-chart-layout"><svg id="riskDistributionChart" class="risk-chart" viewBox="0 0 120 120" role="img" aria-label="Risk distribution chart"></svg><div id="riskChartLegend" class="chart-legend"></div></div>
+            </section>
+            <section class="panel insight-panel" aria-labelledby="platformChartTitle">
+              <div class="panel-header"><div><p class="panel-kicker">ASSET BREAKDOWN</p><h2 id="platformChartTitle">Cases by platform</h2></div><span class="chart-note">Backend case data</span></div>
+              <p class="chart-explanation">Counts show investigations for each platform. Longer bars mean more cases; the longest bar is the most common platform in this workspace.</p>
+              <div id="platformDistributionChart" class="platform-chart" role="img" aria-label="Cases grouped by platform"></div>
+            </section>
+          </div>
+
+          <section class="panel graph-preview-panel">
+            <div class="panel-header"><div><p class="panel-kicker">RELATIONSHIP MAPPING</p><h2>Threat relationship graph</h2></div><button class="quiet-button" type="button" data-view-link="graph">Explore graph <span>→</span></button></div>
+            <p class="chart-explanation">Each box is a case. A line means the cases share an exact indicator entered in the investigation form. No line means no matching entered indicator was found—not that the cases are proven unrelated.</p>
+            <div class="graph-wrap graph-preview"><svg id="dashboardGraph" class="threat-svg" role="img" aria-label="Threat relationship graph preview"></svg></div>
+            <div class="graph-legend"><span><i class="legend-case"></i>Box = investigation (score at right)</span><span><i class="legend-link"></i>Line label = shared indicator</span><span class="legend-note">Select a box to inspect its evidence.</span></div>
+          </section>
+          <p class="disclaimer">ⓘ Risk scores are rule-based indicators, not proof of fraud. Related cases are linked only by explicitly shared indicators.</p>
+        </section>
+
+        <section class="view-section" id="casesView" aria-labelledby="casesTitle" hidden>
+          <div class="page-heading"><div><p class="eyebrow"><span class="eyebrow-dot"></span> SOCIAL &amp; APP DETECTIONS</p><h1 id="casesTitle">Threat detections</h1><p class="subheading">Review suspicious social profiles, impersonation reports, scam accounts, and mobile-app listings.</p></div><button class="button button-primary" type="button" data-open-case><span>＋</span> Add suspected threat</button></div>
+          <div class="panel cases-panel">
+            <div class="toolbar"><label class="search-field"><span>⌕</span><input id="caseSearch" type="search" placeholder="Search asset, brand, or case ID…" autocomplete="off"></label><label class="filter-label" for="riskFilter">Risk</label><select class="select-control" id="riskFilter"><option value="all">All scores</option><option value="high">High · 70–100</option><option value="medium">Medium · 40–69</option><option value="low">Low · 0–39</option></select><label class="filter-label" for="statusFilter">Status</label><select class="select-control" id="statusFilter"><option value="all">All statuses</option><option>New</option><option>Under Review</option><option>Confirmed</option><option>False Positive</option></select><span class="results-count" id="resultsCount">0 cases</span></div>
+            <div class="table-scroll"><table><thead><tr><th>PROFILE / APP / URL</th><th>BRAND</th><th>PLATFORM</th><th>RISK SCORE</th><th>STATUS</th><th>DATE ADDED</th><th><span class="sr-only">Details</span></th></tr></thead><tbody id="casesTableBody"></tbody></table></div>
+            <div class="empty-state hidden" id="casesEmpty"><span class="empty-icon">⌕</span><strong id="casesEmptyTitle">No investigations found</strong><p id="casesEmptyText">Try a different search or filter.</p><button class="button button-secondary hidden" id="clearFilters" type="button">Clear filters</button></div>
+          </div>
+          <p class="disclaimer">ⓘ This prototype uses simulated examples and local explainable rules. It does not connect to social networks or app stores, continuously monitor assets, or verify that a listing is malicious.</p>
+        </section>
+
+        <section class="view-section" id="graphView" aria-labelledby="graphTitle" hidden>
+          <div class="page-heading"><div><p class="eyebrow"><span class="eyebrow-dot"></span> ENTITY RELATIONSHIPS</p><h1 id="graphTitle">Threat Graph</h1><p class="subheading">Explore case connections supported by an exact shared indicator you entered.</p></div><span class="sample-tag">DEMO GRAPH</span></div>
+          <div class="panel graph-panel">
+            <div class="graph-toolbar"><div><span class="graph-state-dot"></span><strong id="graphSummary">0 entities mapped</strong><span class="graph-subtitle">· Indicator matches only</span></div><span class="graph-legend"><span><i class="legend-case"></i>Investigation</span><span><i class="legend-link"></i>Shared indicator</span></span></div>
+            <div class="graph-wrap graph-full"><svg id="threatGraph" class="threat-svg" role="img" aria-label="Threat graph; lines show shared indicators only"></svg><div class="graph-empty hidden" id="graphEmpty"><span>⌘</span><strong>No relationship data yet</strong><p>Add investigations with matching, explicit shared indicators to see a connection.</p><button class="button button-secondary" type="button" data-open-case>Add investigation</button></div></div>
+            <div class="graph-footnote"><span>ⓘ</span> A line appears only when two cases share the same explicitly entered indicator. Shared domain alone does not create a relationship.</div>
+          </div>
+          <div class="panel graph-key-panel"><div class="key-icon">⌘</div><div><strong>How to read this graph</strong><p>Each box is one investigation. The number at the right is its rule-based risk score out of 100. A connecting line is labeled with the exact indicator both cases share. Select a box to inspect its evidence. No line means no matching entered indicator was found; it does not prove the cases are unrelated.</p></div></div>
+        </section>
+
+        <section class="view-section" id="reportsView" aria-labelledby="reportsTitle" hidden>
+          <div class="page-heading"><div><p class="eyebrow"><span class="eyebrow-dot"></span> INVESTIGATION DOCUMENTATION</p><h1 id="reportsTitle">Reports</h1><p class="subheading">Generate a readable, downloadable summary from local case data.</p></div></div>
+          <div class="report-layout">
+            <div class="panel report-form-panel"><div class="panel-header"><div><p class="panel-kicker">REPORT BUILDER</p><h2>Prepare investigation</h2></div><span class="metric-icon metric-orange">▤</span></div><label class="field-label" for="reportCaseSelect">Select a case</label><select class="select-control report-select" id="reportCaseSelect"><option value="">Select an investigation…</option></select><button class="button button-primary report-generate" id="generateReport" type="button">Generate report <span>→</span></button><p class="field-hint">The report includes risk rules, analyst notes, status, and explicit indicator matches.</p></div>
+            <div class="panel report-preview-panel"><div class="report-preview-header"><div><p class="panel-kicker">PREVIEW</p><h2>Investigation summary</h2><p id="reportPreviewMeta">Select a case to begin</p></div><button class="button button-secondary button-small" id="downloadReport" type="button" disabled>↓ Download .txt</button></div><div class="report-output" id="reportOutput"><div class="report-placeholder"><span>▤</span><strong>Your report will appear here</strong><p>Choose a case and generate its summary.</p></div></div></div>
+          </div>
+          <section class="panel report-history-panel"><div class="panel-header"><div><p class="panel-kicker">AUDIT TRAIL</p><h2>Report history</h2></div><span class="panel-live">SAVED IN SQLITE</span></div><div class="report-history-list" id="reportHistoryList"></div></section>
+          <p class="disclaimer">ⓘ Reports are generated locally and are not verified findings or legal determinations.</p>
+        </section>
+
+        <section class="view-section" id="settingsView" aria-labelledby="settingsTitle" hidden>
+          <div class="page-heading"><div><p class="eyebrow"><span class="eyebrow-dot"></span> WORKSPACE PREFERENCES</p><h1 id="settingsTitle">Settings</h1><p class="subheading">Manage local demo data and keep a backup of your investigations.</p></div></div>
+          <div class="settings-grid">
+            <section class="panel settings-card"><div class="settings-heading"><span class="settings-icon icon-cyan">▣</span><div><h2>Local data</h2><p>Cases are saved in the project’s local SQLite database.</p></div></div><div class="settings-stat"><span>Saved investigations</span><strong id="settingsCaseCount">0</strong></div><div class="settings-stat"><span>Sample demo cases</span><strong id="settingsDemoCount">0</strong></div><div class="settings-actions"><button class="button button-secondary" id="exportCases" type="button">↓ Export JSON backup</button><button class="button button-secondary" id="importCases" type="button">↑ Import JSON backup</button><input class="hidden" id="caseBackupInput" type="file" accept="application/json,.json"><button class="button button-danger-quiet" id="resetDemoData" type="button">Reset to sample data</button></div></section>
+            <section class="panel settings-card"><div class="settings-heading"><span class="settings-icon icon-violet">ⓘ</span><div><h2>Demo &amp; scoring</h2><p>Transparent local heuristics help explain this simulated triage.</p></div></div><ul class="settings-rules"><li><strong>+25</strong> Known shortened URL pattern</li><li><strong>+20</strong> Brand absent from the domain, profile handle, or app listing ID</li><li><strong>+20</strong> Scam, phishing, urgency, prize, credential, or payment wording</li><li><strong>+20 / +25</strong> Impersonation cues in profile / app notes</li><li><strong>+10</strong> Indicator explicitly shared with another case</li><li><strong>+10</strong> Unencrypted HTTP URL</li></ul><p class="settings-note">Scores are capped at 100; 0–39 low, 40–69 medium, 70–100 high. This is deterministic rule scoring, not a trained AI model or proof of fraud. Optional Google Safe Browsing URL lookups are manual and do not change the score.</p></section>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog class="case-dialog" id="caseDialog" aria-labelledby="caseDialogTitle">
+    <form id="caseForm" novalidate>
+      <div class="dialog-header"><div><p class="panel-kicker">LOCAL TRIAGE</p><h2 id="caseDialogTitle">Add suspected threat</h2><p>Enter a social profile or mobile-app listing and any concrete observations.</p></div><button class="icon-button" id="closeCaseDialog" type="button" aria-label="Close form">×</button></div>
+      <div class="dialog-body">
+        <div class="form-row"><div class="form-field"><label class="field-label" for="brandName">Protected brand <span class="required">*</span></label><input id="brandName" name="brandName" type="text" maxlength="80" placeholder="e.g. Northstar Outfitters" required><span class="field-error" id="brandError"></span></div><div class="form-field"><label class="field-label" for="platform">Source platform <span class="required">*</span></label><select id="platform" name="platform" required><option value="">Choose a platform</option><option>Instagram</option><option>Facebook</option><option>TikTok</option><option>X / Twitter</option><option>LinkedIn</option><option>YouTube</option><option>Google Play</option><option>Apple App Store</option><option>Website</option><option>Other</option></select><span class="field-error" id="platformError"></span></div></div>
+        <div class="form-field"><label class="field-label" for="profileUrl"><span id="assetUrlLabel">Suspicious profile or app listing URL</span> <span class="required">*</span></label><input id="profileUrl" name="profileUrl" type="text" maxlength="500" placeholder="https://example.com/profile" required><span class="field-hint" id="assetUrlHint">Use a full public URL with https:// or http://.</span><span class="field-error" id="urlError"></span></div>
+        <div class="form-field"><label class="field-label" for="observations">Evidence / observations</label><textarea id="observations" name="observations" rows="3" maxlength="1200" placeholder="Describe specific signals. Avoid sensitive personal information."></textarea><span class="field-hint">Local rules can flag notes mentioning impersonation, unofficial apps, urgency, giveaways, credentials, or payment.</span></div>
+        <div class="form-field"><label class="field-label" for="indicators">Explicit shared indicators <span class="optional-label">OPTIONAL</span></label><input id="indicators" name="indicators" type="text" maxlength="300" placeholder="e.g. contact-ops-17, campaign-spring (comma-separated)"><span class="field-hint">Exact entries are matched case-insensitively across cases. Domain similarity alone never creates a link.</span></div>
+        <div class="form-message hidden" id="formMessage" role="alert"></div><p class="form-disclaimer">This local demo score is an indicator, not proof of fraud. Review all evidence manually.</p>
+      </div>
+      <div class="dialog-footer"><button class="button button-secondary" id="cancelCase" type="button">Cancel</button><button class="button button-primary" id="submitCase" type="submit">Analyze &amp; save <span>→</span></button></div>
+    </form>
+  </dialog>
+
+  <dialog class="case-dialog detail-dialog" id="detailDialog" aria-labelledby="detailTitle">
+    <div class="dialog-header"><div><p class="panel-kicker" id="detailEyebrow">CASE DETAILS</p><h2 id="detailTitle">Investigation details</h2></div><button class="icon-button" id="closeDetailDialog" type="button" aria-label="Close details">×</button></div>
+    <div class="detail-content" id="detailContent"></div><div class="dialog-footer"><button class="button button-danger-quiet" id="deleteCase" type="button">Delete case</button><button class="button button-secondary" id="detailCloseButton" type="button">Close</button></div>
+  </dialog>
+
+  <dialog class="case-dialog tour-dialog" id="tourDialog" aria-labelledby="tourTitle">
+    <div class="dialog-header"><div><p class="panel-kicker">JUDGE WALKTHROUGH · 60 SECONDS</p><h2 id="tourTitle">Meet BrandShield AI</h2><p>A quick look at how the prototype helps an analyst triage suspicious brand assets.</p></div><button class="icon-button" id="closeTour" type="button" aria-label="Close guided demo">×</button></div>
+    <div class="tour-content" aria-live="polite">
+      <div class="tour-progress"><span id="tourProgressLabel">STEP 1 OF 4</span><div class="tour-progress-track"><span id="tourProgressFill"></span></div></div>
+      <span class="tour-step-number" id="tourStepNumber">01</span>
+      <h3 id="tourStepTitle"></h3>
+      <p id="tourStepDescription"></p>
+      <ul class="tour-highlights" id="tourHighlights"></ul>
+    </div>
+    <div class="tour-footer"><button class="button button-secondary" id="tourBack" type="button">← Back</button><button class="button button-secondary" id="tourOpenView" type="button">Explore this view <span aria-hidden="true">↗</span></button><button class="button button-primary" id="tourNext" type="button">Next step <span aria-hidden="true">→</span></button></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

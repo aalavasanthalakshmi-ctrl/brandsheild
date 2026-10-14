@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08111f">
+  <meta name="description" content="Sign in to the BrandShield AI local demo workspace.">
+  <title>Sign in | BrandShield AI</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="login-page">
+  <main class="login-layout">
+    <section class="login-brand-panel" aria-label="About BrandShield AI">
+      <a class="brand login-brand" href="/login" aria-label="BrandShield AI sign in">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 3 27 7v8c0 7-4.7 11.4-11 14C9.7 26.4 5 22 5 15V7l11-4Z"/><path d="m11 16 3.2 3.2L21.5 12"/></svg></span>
+        <span><strong>BrandShield<span>AI</span></strong><small>THREAT OPERATIONS</small></span>
+      </a>
+      <div class="login-brand-copy">
+        <span class="login-overline"><i></i> EXPLAINABLE BRAND PROTECTION</span>
+        <h1>Spot the signals.<br><span>Support the analyst.</span></h1>
+        <p>One focused workspace to triage suspicious brand assets, understand why they were flagged, and document the next step.</p>
+      </div>
+      <div class="login-feature-list">
+        <div><span class="login-feature-icon">◎</span><span><strong>Transparent triage</strong><small>Every demo score comes with visible contributing rules.</small></span></div>
+        <div><span class="login-feature-icon">⌘</span><span><strong>Evidence-led connections</strong><small>Cases connect only through an exact shared indicator.</small></span></div>
+        <div><span class="login-feature-icon">▤</span><span><strong>Local report history</strong><small>Build a clear handoff from the evidence you entered.</small></span></div>
+      </div>
+      <div class="login-brand-foot"><span class="login-status-dot"></span> LOCAL DEMO WORKSPACE <span>·</span> MANUAL CHECKS ONLY</div>
+    </section>
+
+    <section class="login-form-panel" aria-labelledby="loginTitle">
+      <div class="login-form-wrap">
+        <span class="login-mobile-brand">BRANDSHIELD AI <span>· DEMO ACCESS</span></span>
+        <p class="panel-kicker">WELCOME BACK, ANALYST</p>
+        <h2 id="loginTitle">Sign in to your workspace</h2>
+        <p class="login-description">Use the shared demo account to explore the investigation workspace.</p>
+
+        {% if error %}
+        <div class="login-error" role="alert"><span aria-hidden="true">!</span>{{ error }}</div>
+        {% endif %}
+
+        <form class="login-form" method="post" action="/login">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <label class="login-label" for="username">Demo username</label>
+          <div class="login-input-wrap"><span aria-hidden="true">◉</span><input id="username" name="username" type="text" autocomplete="username" value="{{ demo_username }}" required autofocus></div>
+
+          <div class="login-password-heading"><label class="login-label" for="password">Password</label><span>DEMO ACCOUNT</span></div>
+          <div class="login-input-wrap"><span aria-hidden="true">◈</span><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter demo password" required></div>
+
+          <button class="button button-primary login-submit" type="submit">Access workspace <span aria-hidden="true">→</span></button>
+        </form>
+
+        <div class="demo-credentials">
+          <div><span class="demo-credential-icon">✦</span><span><strong>Hackathon demo access</strong><small>Shared credentials for this local prototype</small></span></div>
+          <dl><dt>Username</dt><dd>{{ demo_username }}</dd><dt>Password</dt><dd>{{ demo_password }}</dd></dl>
+        </div>
+
+        <p class="login-disclaimer"><span aria-hidden="true">ⓘ</span> This is a shared demo login, not individual user authentication. Do not use real or sensitive information.</p>
+      </div>
+      <footer class="login-footer"><span>© BrandShield AI · Hackathon prototype</span><span>BUILT FOR HUMAN REVIEW</span></footer>
+    </section>
+  </main>
+</body>
+</html>
